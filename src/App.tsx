@@ -1,4 +1,4 @@
-import {type MutableRefObject, useEffect, useRef, useState} from "react";
+import { type MutableRefObject, useEffect, useRef, useState } from "react";
 
 const App = () => {
 	// A ref is used because this is not going to change with subsequent re-renders.
@@ -11,11 +11,13 @@ const App = () => {
 	useEffect(() => {
 		const params = new URLSearchParams(window.location.search);
 
-		(channelID as MutableRefObject<string | null>).current = params.get('channel');
-		(overlayID as MutableRefObject<string | null>).current = params.get('overlay');
+		(channelID as MutableRefObject<string | null>).current =
+			params.get("channel");
+		(overlayID as MutableRefObject<string | null>).current =
+			params.get("overlay");
 
 		setLoading(false);
-	}, [])
+	}, []);
 
 	if (loading) {
 		return <>Loading...</>;
@@ -25,7 +27,12 @@ const App = () => {
 		return <>Missing channel ID or overlay ID.</>;
 	}
 
-	return <>Quiz Overlay (Channel ID: {channelID.current}, Overlay ID: {overlayID.current})</>;
-}
+	return (
+		<>
+			Quiz Overlay (Channel ID: {channelID.current}, Overlay ID:{" "}
+			{overlayID.current})
+		</>
+	);
+};
 
 export default App;
