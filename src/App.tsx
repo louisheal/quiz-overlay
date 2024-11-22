@@ -1,35 +1,31 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import {type MutableRefObject, useEffect, useRef, useState} from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+	// A ref is used because this is not going to change with subsequent re-renders.
+	// This will probably not be used in the future because data fetching will happen inside the useEffect hook.
+	const channelID = useRef<string | null>(null);
+	const overlayID = useRef<string | null>(null);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	const [loading, setLoading] = useState<boolean>(true);
+
+	useEffect(() => {
+		const params = new URLSearchParams(window.location.search);
+
+		(channelID as MutableRefObject<string | null>).current = params.get('channel');
+		(overlayID as MutableRefObject<string | null>).current = params.get('overlay');
+
+		setLoading(false);
+	}, [])
+
+	if (loading) {
+		return <>Loading...</>;
+	}
+
+	if (!channelID.current || !overlayID.current) {
+		return <>Missing channel ID or overlay ID.</>;
+	}
+
+	return <>Quiz Overlay (Channel ID: {channelID.current}, Overlay ID: {overlayID.current})</>;
 }
 
-export default App
+export default App;
